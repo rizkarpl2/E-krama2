@@ -27,7 +27,8 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'id_divisi'
     ];
 
     /**
@@ -84,7 +85,17 @@ class User extends Authenticatable implements JWTSubject
 
     public function kas_masuk()
     {
-        return $this->belongsTo(KasMasuk::class, 'id_kasmasuk'); // Jika 'role_id' bukan nama kunci asing yang diharapkan, tambahkan argumen kedua
+        return $this->hasMany(KasMasuk::class, 'id_kasmasuk'); // Jika 'role_id' bukan nama kunci asing yang diharapkan, tambahkan argumen kedua
+    }
+
+    public function kas_keluar()
+    {
+        return $this->hasMany(KasKeluar::class, 'id_kaskeluar'); // Jika 'role_id' bukan nama kunci asing yang diharapkan, tambahkan argumen kedua
+    }
+
+    public function divisi() // menambahkan relasi dengan Divisi
+    {
+        return $this->belongsTo(Divisi::class, 'id_divisi');
     }
 
 

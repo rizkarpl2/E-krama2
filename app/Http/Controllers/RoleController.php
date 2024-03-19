@@ -43,7 +43,6 @@ class RoleController extends Controller
                 'role_name' => 'required|unique:roles|max:255',
             ]);
             
-
             $role = Role::create([
                 'role_name' => $request->role_name,
             ]);
@@ -67,22 +66,6 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    // public function show($id)
-    // {
-    //     try {
-    //         $role = Role::findOrFail($id);
-    //         return response()->json([
-    //             'status' => 'success',
-    //             'role' => $role
-    //         ],200);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Role not found: ' . $e->getMessage()
-    //         ], 404);
-    //     }
-    // }
-
     public function show($id)
 {
     try {
@@ -109,9 +92,6 @@ class RoleController extends Controller
     }
 }
 
-
-
-    //update belum bisa 
     public function update(Request $request, $id)
     {
         try {
@@ -135,11 +115,6 @@ class RoleController extends Controller
             ], 500);
         }
     }
-
-    
-
-
-    
 
     /**
      * Remove the specified resource from storage.

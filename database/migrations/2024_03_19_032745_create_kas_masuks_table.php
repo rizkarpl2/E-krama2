@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kas_keluars', function (Blueprint $table) {
-            $table->id('id_kaskeluar');
-            $table->string('nm_pj_klr');
+        Schema::create('kas_masuks', function (Blueprint $table) {
+            $table->id('id_kasmasuk');
+            $table->foreignId('user_id')->constrained('id')->on('users')->onUpdate('restrict')->onDelete('restrict');
+            $table->string('nm_pj');//nama penangung jawab
             $table->date('tgl_input');
             $table->string('nominal');
             $table->string('ket');
-            $table->string('file');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kas_keluars');
+        Schema::dropIfExists('kas_masuks');
     }
 };

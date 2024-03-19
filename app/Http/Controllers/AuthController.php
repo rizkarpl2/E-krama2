@@ -11,6 +11,24 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
+
+    public function index()
+    {
+        try {
+            $users = User::all();
+            return response()->json([
+                'status' => 'success',
+                'users' => $users
+            ],200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch users: ' . $e->getMessage()
+            ], 500);
+        }
+    }  
+
+    
     public function register(Request $req)
     {
         $validator = Validator::make($req->all(), [
@@ -18,6 +36,7 @@ class AuthController extends Controller
             'name' => 'required',
             'password' => 'required',
             'role_id' => 'required',
+            'id_divisi' => 'required',
         ]);
 
         // menambah cek ke database email ini udah di gunakan blm
@@ -35,7 +54,8 @@ class AuthController extends Controller
                 'name' => $req->name,
                 'email' => $req->email,
                 'password' => $req->password,
-                'role_id' => $req->role_id
+                'role_id' => $req->role_id,
+                'id_divisi' => $req->id_divisi
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -78,7 +98,7 @@ class AuthController extends Controller
             ],500);
         }
 
-        $User = User::select('id', 'name', 'email','role_id')
+        $User = User::select('id', 'name', 'email','role_id','id_divisi')
         ->where('name', '=', JWTAuth::user()->name)
         ->first();
     
@@ -89,39 +109,4 @@ class AuthController extends Controller
             'token' => $token
         ], 200);
     } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-    public function index()
-    {
-        try {
-            $users = User::all();
-            return response()->json([
-                'status' => 'success',
-                'users' => $users
-            ],200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to fetch users: ' . $e->getMessage()
-            ], 500);
-        }
-    }  
 }

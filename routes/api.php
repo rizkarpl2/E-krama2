@@ -9,6 +9,7 @@ use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\KasMasukController;
 use App\Http\Controllers\KasKeluarController;
+use App\Http\Middleware\JWTFundamental;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -19,8 +20,6 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-// Route::middleware(['web'])->group(function () {
-// Route::middleware('auth:api', 'jwtfun')->group(function() {
 Route::middleware('jwtfun')->group(function() {
     Route::get('/getrole', [RoleController::class, 'index']); // Mendapatkan daftar semua peran
     Route::post('/createrole', [RoleController::class, 'store']); // Membuat peran baru
@@ -41,11 +40,12 @@ Route::middleware('jwtfun')->group(function() {
    Route::put('updatedivisi/{id}', [DivisiController::class, 'updatedivisi']); // Memperbarui informasi peran berdasarkan ID
    Route::delete('/destroydivisi/{id}', [DivisiController::class, 'destroydivisi']); // perbarui nama aksi menjadi 'destroy'
 
-   Route::get('/getjabatan', [JabatanController::class, 'index']);
-   Route::post('/createjabatan', [JabatanController::class, 'store']); // Membuat peran baru
-   Route::get('jabatan/{id}', [JabatanController::class, 'show']); // Mendapatkan detail peran berdasarkan ID
-   Route::put('updatedjabatan/{id}', [JabatanController::class, 'updatejabatan']); // Memperbarui informasi peran berdasarkan ID
-   Route::delete('/destroyjabatan/{id}', [JabatanController::class, 'destroyjabatan']); // perbarui nama aksi menjadi 'destroy'
+   //Jabatan
+   Route::get('/get-jabatan', [JabatanController::class, 'index']);
+   Route::post('/create-jabatan', [JabatanController::class, 'store']); // Membuat peran baru
+   Route::get('/detail-jabatan/{id}', [JabatanController::class, 'show']); // Mendapatkan detail peran berdasarkan ID
+   Route::put('/update-jabatan/{id}', [JabatanController::class, 'update']); // Memperbarui informasi peran berdasarkan ID
+   Route::delete('/destroy-jabatan/{id}', [JabatanController::class, 'destroy']); // perbarui nama aksi menjadi 'destroy'
 
 
    Route::get('/getkasmasuk', [KasMasukController::class, 'index']);
@@ -56,8 +56,8 @@ Route::middleware('jwtfun')->group(function() {
 
 
    Route::get('/getkaskeluar', [KasKeluarController::class, 'index']);
-   Route::post('/dokumen/createkaskeluar', [KasKeluarController::class, 'store']);
-//    Route::get('kaskeluar/{id}', [KasKeluarController::class, 'show']); // Mendapatkan detail peran berdasarkan ID
-//    Route::put('updatekaskeluar/{id}', [KasKeluarController::class, 'update']); // Memperbarui informasi peran berdasarkan ID
-//    Route::delete('/destroykaskeluar/{id}', [KasKeluarController::class, 'destroy']); // perbarui nama aksi menjadi 'destroy'
+   Route::post('/createkaskeluar', [KasKeluarController::class, 'store']);
+    Route::get('/kaskeluar/{id}', [KasKeluarController::class, 'show']); // Mendapatkan detail peran berdasarkan ID
+    Route::put('/updatekaskeluar/{id}', [KasKeluarController::class, 'update']); // Memperbarui informasi peran berdasarkan ID
+    Route::delete('/destroykaskeluar/{id}', [KasKeluarController::class, 'destroy']); // perbarui nama aksi menjadi 'destroy'
 });

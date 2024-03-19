@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\M_dokumen;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Input;
 
 
 
@@ -12,19 +13,33 @@ use Illuminate\Support\Facades\Storage;
 //pagination belum
 class FileUploadController extends Controller
 {
-
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $m_dokumens = M_dokumen::all();
+            $perPage = $request->input('per_page', 10);
+            $query = M_dokumen::query();
+
+            // Search
+            $search = $request->input('search');
+            if ($search) {
+                $query->where('nm_dokumen', 'like', '%' . $search . '%')
+                      ->orWhere('tgl_input', 'like', '%' . $search . '%')
+                      ->orWhere('penulis', 'like', '%' . $search . '%')
+                      ->orWhere('ket', 'like', '%' . $search . '%')
+                      ->orWhere('file', 'like', '%' . $search . '%');
+            }
+            // Pagination
+            $m_dokumens = $query->paginate($perPage);
+
             return response()->json([
                 'status' => 'success',
-                'm_dokumens' => $m_dokumens
-            ],200);
+                'data' => $m_dokumens
+            ], 200);
+
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to fetch dokumen: ' . $e->getMessage()
+                'message' => 'Gagal mengambil daftar dokumen ' . $e->getMessage()
             ], 500);
         }
     }

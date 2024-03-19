@@ -20,7 +20,7 @@ class JabatanController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to fetch divisi: ' . $e->getMessage()
+                'message' => 'Gagal mengambil jabatan ' . $e->getMessage()
             ], 500);
         }
     }
@@ -44,7 +44,7 @@ class JabatanController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to create jabatan: ' . $e->getMessage()
+                'message' => 'Gagal membuat jabatan baru: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -67,11 +67,10 @@ class JabatanController extends Controller
     }
 
     //mengubah data jabatan
-    public function updatejabatan(Request $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $jabatans = Jabatan::findOrFail($id);
-
             $validator = Validator::make($request->all(), [
                 'jenis_jabatan' => 'required|unique:jabatans,jenis_jabatan,' . $id . ',id_jabatan',
             ]);
@@ -89,19 +88,19 @@ class JabatanController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'jabatan updated successfully',
+                'message' => 'jabatan berhasil diubah',
                 'jabatan' => $jabatans,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to update jabatan: ' . $e->getMessage()
+                'message' => 'gagal mengubah jabatan' . $e->getMessage()
             ], 500);
         }
     }
 
     //menghapus data jabatan
-    public function destroyjabatan($id)
+    public function destroy($id)
     {
         try {
             $jabatans = Jabatan::findOrFail($id);
@@ -109,12 +108,12 @@ class JabatanController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'jabatan deleted successfully'
+                'message' => 'jabatan berhasil dihapus'
             ],200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete jabatan: ' . $e->getMessage()
+                'message' => 'Jabatan gagal dihapus' . $e->getMessage()
             ], 500);
         }
     }   
