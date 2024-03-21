@@ -17,7 +17,7 @@ class KasMasuk extends Model
         'tgl_input',
         'nominal',
         'ket',
-        'user_id',
+        
         
     ];
 

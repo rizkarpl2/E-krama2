@@ -7,15 +7,12 @@ use App\Models\M_dokumen;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
 
-
-
-//search belum
-//pagination belum
 class FileUploadController extends Controller
 {
     public function index(Request $request)
     {
         try {
+            //pagination
             $perPage = $request->input('per_page', 10);
             $query = M_dokumen::query();
 
@@ -31,16 +28,10 @@ class FileUploadController extends Controller
             // Pagination
             $m_dokumens = $query->paginate($perPage);
 
-            return response()->json([
-                'status' => 'success',
-                'data' => $m_dokumens
-            ], 200);
+              return resJson(1, "success", $m_dokumens, 200);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mengambil daftar dokumen ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 
@@ -67,15 +58,10 @@ class FileUploadController extends Controller
                 'file' => $filePath,
             ]);
 
-            return response()->json([
-                'message' => 'Dokumen berhasil diupload', 
-                'data' => $m_dokumens
-            ], 200);
+            return resJson(1, "Dokumen berhasil diupload", $m_dokumens, 200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Gagal mengunggah dokumen', 
-                'error' => $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 
@@ -86,12 +72,10 @@ class FileUploadController extends Controller
             $filePath = $m_dokumens->file;
 
             return Storage::download($filePath);
+            return resJson(1, "Dokumen berhasil didownload", $m_dokumens, 200);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Gagal mengunduh dokumen',
-                'error' => $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 
@@ -99,15 +83,9 @@ class FileUploadController extends Controller
     {
         try {
             $m_dokumens = M_dokumen::findOrFail($id);
-            return response()->json([
-                'status' => 'success',
-                'M_dokumen' => $m_dokumens
-            ],200);
+            return resJson(1, "success", $m_dokumens, 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'dokumen not found: ' . $e->getMessage()
-            ], 404);
+            return resJson(0,'not found',$e,401);
         }
     }
 
@@ -143,15 +121,9 @@ class FileUploadController extends Controller
             // Simpan perubahan
             $m_dokumens->save();
 
-            return response()->json([
-                'status' => 'success',
-                'dokumen' => $m_dokumens
-            ],200);
+            return resJson(1, "success", $m_dokumens, 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update dokumen: ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'not found',$e,401);
         }
     }
 
@@ -161,15 +133,11 @@ class FileUploadController extends Controller
             $m_dokumens = M_dokumen::findOrFail($id);
             $m_dokumens->delete();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'dokumen deleted successfully'
-            ],200);
+            return resJson(1, "success", $m_dokumens, 200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to delete dokumen: ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'not found',$e,401);
+
         }
     }
 

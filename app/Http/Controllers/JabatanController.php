@@ -13,15 +13,10 @@ class JabatanController extends Controller
     {
         try {
             $jabatans = Jabatan::all();
-            return response()->json([
-                'status' => 'success',
-                'jabatan' => $jabatans
-            ],200);
+            return resJson(1, "success", $jabatans, 200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mengambil jabatan ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 
@@ -37,15 +32,9 @@ class JabatanController extends Controller
                 'jenis_jabatan' => $request->jenis_jabatan,
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'jabatan' => $jabatans,
-            ], 200);
+            return resJson(1, "Berhasil menambahkan jabatan baru", $jabatans, 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal membuat jabatan baru: ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'gagal menambahkan jabatan baru',$e,500);
         }
     }
 
@@ -54,15 +43,9 @@ class JabatanController extends Controller
     {
         try {
             $jabatans = Jabatan::findOrFail($id);
-            return response()->json([
-                'status' => 'success',
-                'jabatan' => $jabatans,
-            ],200);
+            return resJson(1, "success", $jabatans, 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Jabatan not found: ' . $e->getMessage()
-            ], 404);
+            return resJson(0,'Jabatan not found',$e,401);
         }
     }
 
@@ -86,16 +69,9 @@ class JabatanController extends Controller
                 'jenis_jabatan' => $request->jenis_jabatan,
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'jabatan berhasil diubah',
-                'jabatan' => $jabatans,
-            ], 200);
+            return resJson(1, "Jabatan berhasil diubah", $jabatans, 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'gagal mengubah jabatan' . $e->getMessage()
-            ], 500);
+            return resJson(0, "Gagal mengubah jabatan", $jabatans, 500);
         }
     }
 
@@ -106,15 +82,9 @@ class JabatanController extends Controller
             $jabatans = Jabatan::findOrFail($id);
             $jabatans->delete();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'jabatan berhasil dihapus'
-            ],200);
+            return resJson(1, "Jabatan berhasil dihapus", $jabatans, 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Jabatan gagal dihapus' . $e->getMessage()
-            ], 500);
+            return resJson(0,'not found',$e,500);
         }
     }   
 }

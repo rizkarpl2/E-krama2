@@ -12,15 +12,10 @@ class DivisiController extends Controller
     {
         try {
             $divisis = Divisi::all();
-            return response()->json([
-                'status' => 'success',
-                'divisi' => $divisis
-            ],200);
+            return resJson(1, "success", $divisis, 200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to fetch divisi: ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 
@@ -38,15 +33,10 @@ class DivisiController extends Controller
                 'id_jabatan' => $request->id_jabatan
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'divisi' => $divisis,
-            ], 200);
+            return resJson(1, "Berhasil menambahkan divisi baru", $divisis, 200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to create divisi: ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'gagal menambahkan divisi baru',$e,500);
         }
     }
 
@@ -55,17 +45,12 @@ class DivisiController extends Controller
     {
         try {
             $divisis = Divisi::findOrFail($id);
-            return response()->json([
-                'status' => 'success',
-                'Divisi' => $divisis,
-            ],200);
+            return resJson(1, "success", $divisis, 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'divisi not found: ' . $e->getMessage()
-            ], 404);
+            return resJson(0,'Divisi not found',$e,401);
         }
     }
+
 
     public function updatedivisi(Request $request, $id)
     {
@@ -79,15 +64,10 @@ class DivisiController extends Controller
                 'nm_divisi' => $request->nm_divisi,
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'divisi' => $divisis,
-            ],200);
+            return resJson(1, "Berhasil mengubah divisi", $divisis, 200);
+            
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update divisi: ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 
@@ -98,15 +78,10 @@ class DivisiController extends Controller
             $divisis = Divisi::findOrFail($id);
             $divisis->delete();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'divisi deleted successfully'
-            ],200);
+            return resJson(1, "Divisi berhasil dihapus", $divisis, 200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to delete divisi ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'not found',$e,500);
         }
     }   
 }

@@ -8,6 +8,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Input;
 
 
+
 class KasMasukController extends Controller
 {
     public function index(Request $request)
@@ -15,6 +16,11 @@ class KasMasukController extends Controller
         try {
             $perPage = $request->input('per_page', 10);
             $query = KasMasuk::query();
+
+             $query->orderBy('created_at', 'desc');
+
+             $query->join('users', 'kas_masuks.user_id', '=', 'users.id');
+             $query->select('kas_masuks.*', 'users.name as name');
 
             // Search
             $search = $request->input('search');
@@ -27,17 +33,12 @@ class KasMasukController extends Controller
             // Pagination
             $kas_masuks = $query->paginate($perPage);
 
-            return response()->json([
-                'status' => 'success',
-                'Data' => $kas_masuks
-            ], 200);
+            return resJson(1, "success", $kas_masuks, 200);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mengambil daftar pemasukan kas ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
+        
     }
 
     public function store(Request $request)
@@ -50,25 +51,23 @@ class KasMasukController extends Controller
                 'ket' => 'required|string',
             ]);
 
-            // Mendapatkan ID pengguna yang saat ini terotentikasi
-            $user_id = Auth::id();
+           
+
+            // // Mendapatkan ID pengguna yang saat ini terotentikasi
+            // $user_id = Auth::id();
+
             $kas_masuks = KasMasuk::create([
                 'nm_pj' => $request->input('nm_pj'),
                 'tgl_input' => $request->input('tgl_input'),
                 'nominal' => $request->input('nominal'),
                 'ket' => $request->input('ket'),
-                'user_id' => $user_id, // Menyimpan user ID
+                // 'user_id' => $user_id, // Menyimpan user ID
             ]);
 
-            return response()->json([
-                'message' => 'Pemasukan kas berhasil ditambah', 
-                'data' => $kas_masuks
-            ], 200);
+            return resJson(1, "success created new pemasukan ", $kas_masuks, 200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Terjadi kesalahan silahkan cek kembali', 
-                'error' => $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 
@@ -76,15 +75,12 @@ class KasMasukController extends Controller
     {
         try {
             $kas_masuks = KasMasuk::findOrFail($id);
-            return response()->json([
-                'status' => 'success',
-                'Data' => $kas_masuks,
-            ],200);
+            
+            return resJson(1, "success", $kas_masuks, 200);
+            
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'not found' . $e->getMessage()
-            ], 404);
+           
+            return resJson(0,'Kas masuk not found',$e,401);
         }
     }
 
@@ -106,16 +102,10 @@ class KasMasukController extends Controller
                 'ket' => $request->input('ket'),
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Pemasukan kas berhasil diubah',
-                'data' => $kas_masuks
-            ],200);
+            return resJson(1, "success", $kas_masuks, 200);
+            
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mengubah pemasukan Kas ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 
@@ -125,15 +115,10 @@ class KasMasukController extends Controller
             $kas_masuks = KasMasuk::findOrFail($id);
             $kas_masuks->delete();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Pemasukan kas berhasil di hapus'
-            ],200);
+            return resJson(1, "pemasukan berhasil dihapus", $kas_masuks, 200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal menghapus pemasukan Kas' . $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 }

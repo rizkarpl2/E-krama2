@@ -11,24 +11,6 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-
-    public function index()
-    {
-        try {
-            $users = User::all();
-            return response()->json([
-                'status' => 'success',
-                'users' => $users
-            ],200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to fetch users: ' . $e->getMessage()
-            ], 500);
-        }
-    }  
-
-    
     public function register(Request $req)
     {
         $validator = Validator::make($req->all(), [
@@ -49,7 +31,7 @@ class AuthController extends Controller
         }
         
         try {
-            User::create([
+            $user= User::create([
                 'id' => Str::uuid()->toString(), //Universally Unique Identifier 
                 'name' => $req->name,
                 'email' => $req->email,
@@ -57,15 +39,21 @@ class AuthController extends Controller
                 'role_id' => $req->role_id,
                 'id_divisi' => $req->id_divisi
             ]);
+
+            return response()->json([
+                    'message' => 'registrasi berhasil'
+                ], 200);
+
+            
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
                 'code' => 500
             ],500);
         }
-        return response()->json([
-            'message' => 'registrasi berhasil'
-        ], 200);
+        // return response()->json([
+        //     'message' => 'registrasi berhasil'
+        // ], 200);
     }
 
 
@@ -87,7 +75,7 @@ class AuthController extends Controller
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json([
-                    'error' => 'Harap periksa kembali name atau password anda!',
+                    'message' => 'Harap periksa kembali name atau password anda!',
                     'code' => 400
                 ],400);
             }
@@ -105,8 +93,22 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'success, anda berhasil login',
-            'user' => $User,
+            'data' => $User,
             'token' => $token
         ], 200);
+    } 
+
+
+    public function index()
+    {
+        try {
+            $users = User::all();
+
+            return resJson(1, "success", $users, 200);
+
+        } catch (\Exception $e) {
+    
+            return resJson(0, "error", $users, 500);
+        }
     } 
 }

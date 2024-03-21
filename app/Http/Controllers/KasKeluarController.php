@@ -15,6 +15,7 @@ class KasKeluarController extends Controller
     public function index(Request $request)
     {
         try {
+            //pagination
             $perPage = $request->input('per_page', 10);
             $query = KasKeluar::query();
 
@@ -29,16 +30,10 @@ class KasKeluarController extends Controller
             // Pagination
             $kas_keluars = $query->paginate($perPage);
 
-            return response()->json([
-                'status' => 'success',
-                'Data' => $kas_keluars
-            ], 200);
+            return resJson(1,"success", $kas_keluars,200);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mengambil daftar pemasukan kas ' . $e->getMessage()
-            ], 500);
+            return resjson(0,'error',$e,500);
         }
     }
 
@@ -63,15 +58,10 @@ class KasKeluarController extends Controller
                 'user_id' => $user_id, // Menyimpan user ID
             ]);
 
-            return response()->json([
-                'message' => 'Pengeluaran kas berhasil ditambah', 
-                'data' => $kas_keluars
-            ], 200);
+            return resJson(1,"Berhasil menambahkan pengeluaran kas", $kas_keluars,200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Gagal menambah pengeluaran kas', 
-                'error' => $e->getMessage()
-            ], 500);
+            return resjson(0,'error',$e,500);
         }
     }
 
@@ -79,15 +69,10 @@ class KasKeluarController extends Controller
     {
         try {
             $kas_keluars = KasKeluar::findOrFail($id);
-            return response()->json([
-                'status' => 'success',
-                'Data' => $kas_keluars,
-            ],200);
+            return resJson(1,"success", $kas_keluars,200);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Pemasukan kas not found: ' . $e->getMessage()
-            ], 404);
+            return resjson(0,'error',$e,500);
         }
     }
 
@@ -111,17 +96,10 @@ class KasKeluarController extends Controller
                 'nominal' => $request->input('nominal'),
                 'ket' => $request->input('ket'),
             ]);
+            return resJson(1,"Pemasukan kas berhasil diubah", $kas_keluars,200);
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Pemasukan kas berhasil diubah',
-                'data' => $kas_keluars
-            ],200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update Pemasukan Kas ' . $e->getMessage()
-            ], 500);
+            return resjson(0,'error',$e,500);
         }
     }
 
@@ -131,15 +109,10 @@ class KasKeluarController extends Controller
             $kas_keluars = KasKeluar::findOrFail($id);
             $kas_keluars->delete();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Pengeluaran kas berhasil di hapus'
-            ],200);
+            return resJson(1,"Pemasukan kas berhasil dihapus", $kas_keluars,200);
+            
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to delete Pengeluaran Kas: ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 }

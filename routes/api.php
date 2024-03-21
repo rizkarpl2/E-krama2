@@ -13,11 +13,10 @@ use App\Http\Middleware\JWTFundamental;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::get('/getuser', [AuthController::class, 'index']);
-
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class,'login']);
     Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/getuser', [AuthController::class, 'index']);
 });
 
 Route::middleware('jwtfun')->group(function() {
@@ -48,12 +47,16 @@ Route::middleware('jwtfun')->group(function() {
    Route::delete('/destroy-jabatan/{id}', [JabatanController::class, 'destroy']); // perbarui nama aksi menjadi 'destroy'
 
 
-   Route::get('/getkasmasuk', [KasMasukController::class, 'index']);
-   Route::post('/kasmasuk', [KasMasukController::class, 'store']);
-   Route::get('kasmasuk/{id}', [KasMasukController::class, 'show']); // Mendapatkan detail peran berdasarkan ID
-   Route::put('updatekasmasuk/{id}', [KasMasukController::class, 'update']); // Memperbarui informasi peran berdasarkan ID
-   Route::delete('/destroykasmasuk/{id}', [KasMasukController::class, 'destroy']); // perbarui nama aksi menjadi 'destroy'
+   
 
+    Route::get('/getkasmasuk', [KasMasukController::class, 'index']);
+    Route::post('/kasmasuk', [KasMasukController::class, 'store']);
+    Route::get('kasmasuk/{id}', [KasMasukController::class, 'show']); // Mendapatkan detail peran berdasarkan ID
+    Route::put('updatekasmasuk/{id}', [KasMasukController::class, 'update']); // Memperbarui informasi peran berdasarkan ID
+    Route::delete('/destroykasmasuk/{id}', [KasMasukController::class, 'destroy']); // perbarui nama aksi menjadi 'destroy'
+
+
+   
 
    Route::get('/getkaskeluar', [KasKeluarController::class, 'index']);
    Route::post('/createkaskeluar', [KasKeluarController::class, 'store']);
