@@ -9,6 +9,7 @@ use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\KasMasukController;
 use App\Http\Controllers\KasKeluarController;
+use App\Http\Controllers\AnggotaController;
 use App\Http\Middleware\JWTFundamental;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,4 +64,17 @@ Route::middleware('jwtfun')->group(function() {
     Route::get('/kaskeluar/{id}', [KasKeluarController::class, 'show']); // Mendapatkan detail peran berdasarkan ID
     Route::put('/updatekaskeluar/{id}', [KasKeluarController::class, 'update']); // Memperbarui informasi peran berdasarkan ID
     Route::delete('/destroykaskeluar/{id}', [KasKeluarController::class, 'destroy']); // perbarui nama aksi menjadi 'destroy'
+
+
+Route::get('/getanggota', [AnggotaController::class, 'index']);
+   Route::post('/createanggota', [AnggotaController::class, 'store']);
+   Route::get('/anggota/{id}', [AnggotaController::class, 'show']); // Mendapatkan detail peran berdasarkan ID
+   Route::put('/updateanggota/{id}', [AnggotaController::class, 'update']); // Memperbarui informasi peran berdasarkan ID
+   Route::delete('/destroyanggota/{id}', [AnggotaController::class, 'destroy']); // perbarui nama aksi menjadi 'destroy'
+
+   
+
+
+
+
 });

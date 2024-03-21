@@ -20,7 +20,7 @@ class RoleController extends Controller
             $roles = Role::all();
             return response()->json([
                 'status' => 'success',
-                'roles' => $roles
+                'data' => $roles
             ],200);
         } catch (\Exception $e) {
             return response()->json([
@@ -37,6 +37,7 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+
     {
         try {
             $request->validate([
@@ -47,10 +48,7 @@ class RoleController extends Controller
                 'role_name' => $request->role_name,
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'role' => $role
-            ], 200);
+            return resJson(1, "success", $role, 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -67,30 +65,14 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-{
-    try {
-        // Ubah pencarian berdasarkan nama kunci utama
-        $role = Role::find($id);
-
-        // Periksa apakah peran ditemukan
-        if (!$role) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Role not found'
-            ], 404);
+    {
+        try {
+            $role = Role::findOrFail($id);
+            return resJson(1, "success", $role, 200);
+        } catch (\Exception $e) {
+            return resJson(0,'role not found',$e,401);
         }
-
-        return response()->json([
-            'status' => 'success',
-            'role' => $role
-        ], 200);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Failed to fetch role: ' . $e->getMessage()
-        ], 500);
     }
-}
 
     public function update(Request $request, $id)
     {
@@ -104,15 +86,9 @@ class RoleController extends Controller
                 'role_name' => $request->role_name,
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'role' => $role
-            ],200);
+            return resJson(1, "Role berhasil diubah", $role, 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update role: ' . $e->getMessage()
-            ], 500);
+            return resJson(0,'error',$e,500);
         }
     }
 
@@ -127,16 +103,12 @@ class RoleController extends Controller
         try {
             $role = Role::findOrFail($id);
             $role->delete();
+             
+            return resJson(1, "Role berhasil dihapus", $role, 200);
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Role deleted successfully'
-            ],200);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to delete role: ' . $e->getMessage()
-            ], 500);
+
+            return resJson(0,'error',$e,500);
         }
     }
   
