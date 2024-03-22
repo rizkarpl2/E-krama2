@@ -18,42 +18,34 @@ class AuthController extends Controller
             'name' => 'required',
             'password' => 'required',
             'role_id' => 'required',
-            'id_divisi' => 'required',
         ]);
 
         // menambah cek ke database email ini udah di gunakan blm
-        $User = User::where('email', $req->email)->first();
-        if ($User) {
+        $users = User::where('email', $req->email)->first();
+        if ($users) {
             return response()->json([
-                'message' => 'Email sudah terdaftar.',
+                'status'=> 0 ,
+                'message' => 'Email sudah terdaftar',
                 'code' => 400
             ], 400);
         }
         
         try {
-            $user= User::create([
+            $users= User::create([
                 'id' => Str::uuid()->toString(), //Universally Unique Identifier 
                 'name' => $req->name,
                 'email' => $req->email,
                 'password' => $req->password,
                 'role_id' => $req->role_id,
-                'id_divisi' => $req->id_divisi
             ]);
+            return resJson(1,"Registrasi berhasil",$users,200);
 
-            return response()->json([
-                    'message' => 'registrasi berhasil'
-                ], 200);
-
-            
         } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-                'code' => 500
-            ],500);
+            return resJson(0,'error',$e,500);
         }
-        // return response()->json([
-        //     'message' => 'registrasi berhasil'
-        // ], 200);
+        catch(\Throwable $th){
+            return resJson(0,'error',$th,500);
+        }
     }
 
 
@@ -74,10 +66,7 @@ class AuthController extends Controller
         
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json([
-                    'message' => 'Harap periksa kembali name atau password anda!',
-                    'code' => 400
-                ],400);
+                return resJson(0,'Harap periksa kembali name atau password anda',$e,400);
             }
         } catch (JWTException $e) {
             return response()->json([
@@ -86,16 +75,17 @@ class AuthController extends Controller
             ],500);
         }
 
-        $User = User::select('id', 'name', 'email','role_id','id_divisi')
+        $users = User::select('id', 'name', 'email','role_id')
         ->where('name', '=', JWTAuth::user()->name)
         ->first();
     
 
         return response()->json([
+            'status' => '1',
             'message' => 'success, anda berhasil login',
-            'data' => $User,
+            'data' => $users,
             'token' => $token
-        ], 200);
+        ], 200);        
     } 
 
 

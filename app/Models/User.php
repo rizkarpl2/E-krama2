@@ -93,10 +93,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(KasKeluar::class, 'id_kaskeluar'); // Jika 'role_id' bukan nama kunci asing yang diharapkan, tambahkan argumen kedua
     }
 
-    public function divisi() // menambahkan relasi dengan Divisi
-    {
-        return $this->belongsTo(Divisi::class, 'id_divisi');
-    }
+
 
 
 }
