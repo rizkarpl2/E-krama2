@@ -15,29 +15,32 @@ class AnggotaController extends Controller
     public function index(Request $request)
     {
         try {
-            //pagination
-            $perPage = $request->input('per_page', 10);
             $query = Anggota::query();
 
-            // Search
+            $perPage = $request->input('per_page', 10);
+            $query = Anggota::orderBy('created_at', 'desc');
+
+            // Menambahkan pencarian jika ada
             $search = $request->input('search');
             if ($search) {
                 $query->where('nm_anggota', 'like', '%' . $search . '%')
-                      ->orWhere('email', 'like', '%' . $search . '%')
-                      ->orWhere('alamat', 'like', '%' . $search . '%')
-                      ->orWhere('no_tlp', 'like', '%' . $search . '%')
-                      ->orWhere('tgl_lahir', 'like', '%' . $search . '%')
-                      ->orWhere('tgl_gabung', 'like', '%' . $search . '%');
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('alamat', 'like', '%' . $search . '%')
+                    ->orWhere('no_tlp', 'like', '%' . $search . '%')
+                    ->orWhere('tgl_lahir', 'like', '%' . $search . '%')
+                    ->orWhere('tgl_gabung', 'like', '%' . $search . '%');
             }
-            // Pagination
+
+            // Lakukan query untuk pagination setelah menerapkan pencarian dan urutan
             $anggotas = $query->paginate($perPage);
 
-            return resJson(1,"success", $anggotas,200);
+            return resJson(1, "success", $anggotas, 200);
 
         } catch (\Exception $e) {
-            return resjson(0,'error',$e,500);
+            return resJson(0, 'error', $e, 500);
         }
     }
+
 
 
 

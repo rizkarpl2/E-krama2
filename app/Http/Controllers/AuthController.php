@@ -58,10 +58,12 @@ class AuthController extends Controller
         ]);
         
         if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->getMessageBag(),
-                'code' => 400
-            ],400);
+            return resJson(
+                0,
+                'error',
+                $validator->getMessageBag(),
+                501
+            );
         }
         
         try {
@@ -69,10 +71,11 @@ class AuthController extends Controller
                 return resJson(0,'Harap periksa kembali name atau password anda',$e,400);
             }
         } catch (JWTException $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-                'code' => 500
-            ],500);
+            return resJSON(0,
+                'error',
+                $e->getMessage(),
+                500
+            );
         }
 
         $users = User::select('id', 'name', 'email','role_id')
@@ -93,6 +96,7 @@ class AuthController extends Controller
     {
         try {
             $users = User::all();
+            $users = User::orderBy('created_at','desc')->get();
 
             return resJson(1, "success", $users, 200);
 
