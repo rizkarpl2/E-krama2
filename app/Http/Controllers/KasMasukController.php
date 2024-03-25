@@ -19,9 +19,6 @@ class KasMasukController extends Controller
 
              $query->orderBy('created_at', 'desc');
 
-             $query->join('users', 'kas_masuks.user_id', '=', 'users.id');
-             $query->select('kas_masuks.*', 'users.name as name');
-
             // Search
             $search = $request->input('search');
             if ($search) {
@@ -38,6 +35,13 @@ class KasMasukController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'error',$e,500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
         
     }
 
@@ -49,25 +53,25 @@ class KasMasukController extends Controller
                 'tgl_input' => 'required|date',
                 'nominal' => 'required|string',
                 'ket' => 'required|string',
-            ]);
-
-           
-
-            // // Mendapatkan ID pengguna yang saat ini terotentikasi
-            // $user_id = Auth::id();
-
+            ]); 
             $kas_masuks = KasMasuk::create([
                 'nm_pj' => $request->input('nm_pj'),
                 'tgl_input' => $request->input('tgl_input'),
                 'nominal' => $request->input('nominal'),
                 'ket' => $request->input('ket'),
-                // 'user_id' => $user_id, // Menyimpan user ID
             ]);
 
             return resJson(1, "success created new pemasukan ", $kas_masuks, 200);
 
         } catch (\Exception $e) {
             return resJson(0,'error',$e,500);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -80,7 +84,14 @@ class KasMasukController extends Controller
             
         } catch (\Exception $e) {
            
-            return resJson(0,'Kas masuk not found',$e,401);
+            return resJson(0,'not found',$e,404);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -105,7 +116,14 @@ class KasMasukController extends Controller
             return resJson(1, "success", $kas_masuks, 200);
             
         } catch (\Exception $e) {
-            return resJson(0,'error',$e,500);
+            return resJson(0,'not found',$e,404);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -118,7 +136,14 @@ class KasMasukController extends Controller
             return resJson(1, "pemasukan berhasil dihapus", $kas_masuks, 200);
 
         } catch (\Exception $e) {
-            return resJson(0,'error',$e,500);
+            return resJson(0,'not found',$e,404);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 }

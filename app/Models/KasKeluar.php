@@ -17,7 +17,7 @@ class KasKeluar extends Model
         'tgl_input',
         'nominal',
         'ket',
-        'user_id',
+        'name',
         
     ];
 

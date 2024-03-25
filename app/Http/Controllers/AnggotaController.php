@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 
 
+
 class AnggotaController extends Controller
 {
     public function index(Request $request)
     {
         try {
             $query = Anggota::query();
-
             $perPage = $request->input('per_page', 10);
             $query = Anggota::orderBy('created_at', 'desc');
 
@@ -34,10 +34,17 @@ class AnggotaController extends Controller
             // Lakukan query untuk pagination setelah menerapkan pencarian dan urutan
             $anggotas = $query->paginate($perPage);
 
-            return resJson(1, "success", $anggotas, 200);
+            return resJSON(1, "success", $anggotas, 200);
 
         } catch (\Exception $e) {
-            return resJson(0, 'error', $e, 500);
+            return resJSON(0, 'not found', $e, 404);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -71,10 +78,17 @@ class AnggotaController extends Controller
                 
             ]);
 
-            return resJson(1, "Berhasil menambahkan Anggota baru", $anggotas, 200);
+            return resJSON(1, "Berhasil menambahkan Anggota baru", $anggotas, 200);
 
         } catch (\Exception $e) {
-            return resJson(0,'gagal menambahkan Anggota baru',$e,500);
+            return resJSON(0,'gagal menambahkan Anggota baru',$e,500);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -107,10 +121,17 @@ class AnggotaController extends Controller
                 'id_jabatan' => $request->id_jabatan
             ]);
 
-            return resJson(1, "Berhasil mengubah anggota", $anggotas, 200);
+            return resJSON(1, "Berhasil mengubah anggota", $anggotas, 200);
             
         } catch (\Exception $e) {
-            return resJson(0,'error',$e,500);
+            return resJSON(0,'error',$e,500);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -119,9 +140,9 @@ class AnggotaController extends Controller
     {
         try {
             $anggotas = Anggota::findOrFail($id);
-            return resJson(1, "success", $anggotas, 200);
+            return resJSON(1, "success", $anggotas, 200);
         } catch (\Exception $e) {
-            return resJson(0,' not found',$e,401);
+            return resJSON(0,' not found',$e,401);
         }
     }
 
@@ -132,14 +153,17 @@ class AnggotaController extends Controller
             $anggotas = Anggota::findOrFail($id);
             $anggotas->delete();
 
-            return resJson(1, "Anggota berhasil dihapus", $anggotas, 200);
+            return resJSON(1, "Anggota berhasil dihapus", $anggotas, 200);
 
         } catch (\Exception $e) {
-            return resJson(0,'not found',$e,500);
+            return resJSON(0,'not found',$e,401);
         }
-    }   
-
-
-    
-
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
+    }       
 }

@@ -12,12 +12,13 @@ use Illuminate\Support\Facades\Input;
 
 class KasKeluarController extends Controller
 {
+
     public function index(Request $request)
     {
         try {
-            //pagination
-            $perPage = $request->input('per_page', 10);
             $query = KasKeluar::query();
+            $perPage = $request->input('per_page', 10);
+            $query->orderBy('created_at', 'desc');
 
             // Search
             $search = $request->input('search');
@@ -28,14 +29,23 @@ class KasKeluarController extends Controller
                       ->orWhere('ket', 'like', '%' . $search . '%');
             }
             // Pagination
-            $kas_keluars = $query->paginate($perPage);
+            $kas_masuks = $query->paginate($perPage);
 
-            return resJson(1,"success", $kas_keluars,200);
+            return resJson(1, "success", $kas_masuks, 200);
 
         } catch (\Exception $e) {
-            return resjson(0,'error',$e,500);
+            return resJson(0,'error',$e,500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
+        
     }
+
 
     public function store(Request $request)
     {
@@ -48,20 +58,27 @@ class KasKeluarController extends Controller
             ]);
 
             // Mendapatkan ID pengguna yang saat ini terotentikasi
-            $user_id = Auth::id();
+            $user_name = Auth::user()->name;
 
             $kas_keluars = KasKeluar::create([
                 'nm_pj_klr' => $request->input('nm_pj_klr'),
                 'tgl_input' => $request->input('tgl_input'),
                 'nominal' => $request->input('nominal'),
                 'ket' => $request->input('ket'),
-                'user_id' => $user_id, // Menyimpan user ID
+                'name' => $user_name, // Menyimpan user ID
             ]);
 
             return resJson(1,"Berhasil menambahkan pengeluaran kas", $kas_keluars,200);
 
         } catch (\Exception $e) {
             return resjson(0,'error',$e,500);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -72,7 +89,14 @@ class KasKeluarController extends Controller
             return resJson(1,"success", $kas_keluars,200);
 
         } catch (\Exception $e) {
-            return resjson(0,'error',$e,500);
+            return resjson(0,'not found',$e,404);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -99,7 +123,14 @@ class KasKeluarController extends Controller
             return resJson(1,"Pemasukan kas berhasil diubah", $kas_keluars,200);
 
         } catch (\Exception $e) {
-            return resjson(0,'error',$e,500);
+            return resjson(0,'not found',$e,404);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -112,7 +143,14 @@ class KasKeluarController extends Controller
             return resJson(1,"Pemasukan kas berhasil dihapus", $kas_keluars,200);
             
         } catch (\Exception $e) {
-            return resJson(0,'error',$e,500);
+            return resJson(0,'not found',$e,404);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 }

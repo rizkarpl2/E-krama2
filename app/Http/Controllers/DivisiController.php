@@ -17,6 +17,13 @@ class DivisiController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'error',$e,500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
     //create jabatan
@@ -38,6 +45,13 @@ class DivisiController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'gagal menambahkan divisi baru',$e,500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
 
@@ -49,10 +63,17 @@ class DivisiController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'Divisi not found',$e,401);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
 
-    public function updatedivisi(Request $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $request->validate([
@@ -69,10 +90,17 @@ class DivisiController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'error',$e,500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
     //menghapus data divisi
-    public function destroydivisi($id)
+    public function destroy($id)
     {
         try {
             $divisis = Divisi::findOrFail($id);
@@ -82,6 +110,13 @@ class DivisiController extends Controller
 
         } catch (\Exception $e) {
             return resJson(0,'not found',$e,500);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }   
 }

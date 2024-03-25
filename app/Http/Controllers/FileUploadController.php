@@ -28,10 +28,17 @@ class FileUploadController extends Controller
             // Pagination
             $m_dokumens = $query->paginate($perPage);
 
-              return resJson(1, "success", $m_dokumens, 200);
+            return resJson(1, "success", $m_dokumens, 200);
 
         } catch (\Exception $e) {
             return resJson(0,'error',$e,500);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -63,6 +70,13 @@ class FileUploadController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'error',$e,500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
     public function downloadDokumen($id)
@@ -77,6 +91,13 @@ class FileUploadController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'error',$e,500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
     public function showdokumen($id)
@@ -86,6 +107,13 @@ class FileUploadController extends Controller
             return resJson(1, "success", $m_dokumens, 200);
         } catch (\Exception $e) {
             return resJson(0,'not found',$e,401);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -125,6 +153,13 @@ class FileUploadController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'not found',$e,401);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
     public function destroy($id)
@@ -139,6 +174,12 @@ class FileUploadController extends Controller
             return resJson(0,'not found',$e,401);
 
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
-
 }

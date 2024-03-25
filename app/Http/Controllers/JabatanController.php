@@ -18,6 +18,13 @@ class JabatanController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'error',$e,500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
     //create jabatan
@@ -36,7 +43,15 @@ class JabatanController extends Controller
         } catch (\Exception $e) {
             return resJson(0,'gagal menambahkan jabatan baru',$e,500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
+    
 
     //menampilkan detail
     public function show($id)
@@ -46,6 +61,13 @@ class JabatanController extends Controller
             return resJson(1, "success", $jabatans, 200);
         } catch (\Exception $e) {
             return resJson(0,'Jabatan not found',$e,401);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -73,6 +95,13 @@ class JabatanController extends Controller
         } catch (\Exception $e) {
             return resJson(0, "Gagal mengubah jabatan", $jabatans, 500);
         }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
     //menghapus data jabatan
@@ -85,6 +114,13 @@ class JabatanController extends Controller
             return resJson(1, "Jabatan berhasil dihapus", $jabatans, 200);
         } catch (\Exception $e) {
             return resJson(0,'not found',$e,500);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }   
 }

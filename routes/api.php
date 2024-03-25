@@ -37,8 +37,8 @@ Route::middleware('jwtfun')->group(function() {
    Route::get('/getdivisi', [DivisiController::class, 'index']);
    Route::post('/createdivisi', [DivisiController::class, 'store']); // Membuat peran baru
    Route::get('divisi/{id}', [DivisiController::class, 'show']); // Mendapatkan detail peran berdasarkan ID
-   Route::put('updatedivisi/{id}', [DivisiController::class, 'updatedivisi']); // Memperbarui informasi peran berdasarkan ID
-   Route::delete('/destroydivisi/{id}', [DivisiController::class, 'destroydivisi']); // perbarui nama aksi menjadi 'destroy'
+   Route::put('updatedivisi/{id}', [DivisiController::class, 'update']); // Memperbarui informasi peran berdasarkan ID
+   Route::delete('/destroydivisi/{id}', [DivisiController::class, 'destroy']); // perbarui nama aksi menjadi 'destroy'
 
    //Jabatan
    Route::get('/get-jabatan', [JabatanController::class, 'index']);

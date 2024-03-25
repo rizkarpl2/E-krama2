@@ -44,7 +44,11 @@ class AuthController extends Controller
             return resJson(0,'error',$e,500);
         }
         catch(\Throwable $th){
-            return resJson(0,'error',$th,500);
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 
@@ -101,8 +105,14 @@ class AuthController extends Controller
             return resJson(1, "success", $users, 200);
 
         } catch (\Exception $e) {
-    
             return resJson(0, "error", $users, 500);
+        }
+        catch(\Throwable $th){
+            return resJSON(0,
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     } 
 }
