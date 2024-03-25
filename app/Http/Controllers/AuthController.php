@@ -66,7 +66,7 @@ class AuthController extends Controller
                 0,
                 'error',
                 $validator->getMessageBag(),
-                501
+                500
             );
         }
         

@@ -27,7 +27,7 @@ class AnggotaController extends Controller
                     ->orWhere('alamat', 'like', '%' . $search . '%')
                     ->orWhere('no_tlp', 'like', '%' . $search . '%')
                     ->orWhere('tgl_lahir', 'like', '%' . $search . '%')
-                    ->orWhere('tgl_gabung', 'like', '%' . $search . '%');
+                    ->orWhere('tgl_bergabung', 'like', '%' . $search . '%');
             }
 
             // Lakukan query untuk pagination setelah menerapkan pencarian dan urutan
@@ -46,9 +46,6 @@ class AnggotaController extends Controller
             );
         }
     }
-
-
-
 
     //create anggota
     public function store(Request $request)

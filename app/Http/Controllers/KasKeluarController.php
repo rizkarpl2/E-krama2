@@ -57,15 +57,14 @@ class KasKeluarController extends Controller
                 'ket' => 'required|string',
             ]);
 
-            // Mendapatkan ID pengguna yang saat ini terotentikasi
-            $user_name = Auth::user()->name;
+            $user_id = Auth::id();
 
             $kas_keluars = KasKeluar::create([
                 'nm_pj_klr' => $request->input('nm_pj_klr'),
                 'tgl_input' => $request->input('tgl_input'),
                 'nominal' => $request->input('nominal'),
                 'ket' => $request->input('ket'),
-                'name' => $user_name, // Menyimpan user ID
+                'user_id' => $user_id,
             ]);
 
             return resJson(1,"Berhasil menambahkan pengeluaran kas", $kas_keluars,200);

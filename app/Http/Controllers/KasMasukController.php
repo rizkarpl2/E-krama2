@@ -57,17 +57,22 @@ class KasMasukController extends Controller
                 'nominal' => 'required|string',
                 'ket' => 'required|string',
             ]); 
+
+
+            $user_id = Auth::id();
+
             $kas_masuks = KasMasuk::create([
                 'nm_pj' => $request->input('nm_pj'),
                 'tgl_input' => $request->input('tgl_input'),
                 'nominal' => $request->input('nominal'),
                 'ket' => $request->input('ket'),
+                'user_id' => $user_id,
             ]);
 
             return resJson(1, "success created new pemasukan ", $kas_masuks, 200);
 
         } catch (\Exception $e) {
-            return resJson(0,'error',$e,500);
+            return resJson(0,'bad request',$e,400);
         }
         catch(\Throwable $th){
             return resJSON(0,
@@ -119,7 +124,7 @@ class KasMasukController extends Controller
             return resJson(1, "success", $kas_masuks, 200);
             
         } catch (\Exception $e) {
-            return resJson(0,'not found',$e,404);
+            return resJson(0,'error',$e,500);
         }
         catch(\Throwable $th){
             return resJSON(0,
