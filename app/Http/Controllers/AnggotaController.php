@@ -16,7 +16,7 @@ class AnggotaController extends Controller
     public function index(Request $request)
     {
         try {
-            $size = $request->input('size', 5);
+            $perPage = $request->input('per_page', 10);
             $query = Anggota::orderBy('created_at', 'desc');
 
             // Menambahkan pencarian jika ada
@@ -31,7 +31,7 @@ class AnggotaController extends Controller
             }
 
             // Lakukan query untuk pagination setelah menerapkan pencarian dan urutan
-            $anggotas = $query->paginate($size);
+            $anggotas = $query->paginate($perPage);
 
             return resJSON(1, "success", $anggotas, 200);
 
