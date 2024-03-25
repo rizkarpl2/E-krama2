@@ -14,8 +14,7 @@ class FileUploadController extends Controller
         try {
             //pagination
             $perPage = $request->input('per_page', 10);
-            $query = M_dokumen::query();
-
+    
             // Search
             $search = $request->input('search');
             if ($search) {

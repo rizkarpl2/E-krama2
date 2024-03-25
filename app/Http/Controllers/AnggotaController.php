@@ -16,7 +16,6 @@ class AnggotaController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = Anggota::query();
             $perPage = $request->input('per_page', 10);
             $query = Anggota::orderBy('created_at', 'desc');
 

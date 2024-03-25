@@ -11,22 +11,25 @@ use Illuminate\Support\Facades\Input;
 
 class KasMasukController extends Controller
 {
+
     public function index(Request $request)
     {
         try {
+            // Mengatur jumlah item per halaman
             $perPage = $request->input('per_page', 10);
-            $query = KasMasuk::query();
-
-             $query->orderBy('created_at', 'desc');
+            
+            // query ketika data baru masuk berada paling atas
+            $query = KasMasuk::orderBy('created_at', 'desc');
 
             // Search
             $search = $request->input('search');
             if ($search) {
                 $query->where('nm_pj', 'like', '%' . $search . '%')
-                      ->orWhere('tgl_input', 'like', '%' . $search . '%')
-                      ->orWhere('nominal', 'like', '%' . $search . '%')
-                      ->orWhere('ket', 'like', '%' . $search . '%');
+                    ->orWhere('tgl_input', 'like', '%' . $search . '%')
+                    ->orWhere('nominal', 'like', '%' . $search . '%')
+                    ->orWhere('ket', 'like', '%' . $search . '%');
             }
+
             // Pagination
             $kas_masuks = $query->paginate($perPage);
 
@@ -42,8 +45,8 @@ class KasMasukController extends Controller
                 500
             );
         }
-        
     }
+
 
     public function store(Request $request)
     {
